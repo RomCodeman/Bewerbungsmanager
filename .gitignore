@@ -1,0 +1,15 @@
+# Python-Cache und temporäre Dateien
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# virtuelle Umgebungen
+.v_bwrbngmngr/
+
+# VS Code Einstellungen
+.vscode/
