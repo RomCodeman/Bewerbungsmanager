@@ -229,6 +229,14 @@ Für die Beziehung zwischen `Application` und `Company` soll `PROTECT` statt `CA
 - [x] Django REST Framework integriert
 - [x] Backend erfolgreich gestartet
 
+### Meilenstein 3 – Django-Datenmodell
+
+- [x] Modelle `Company` und `Application` implementiert
+- [x] 1:n-Beziehung umgesetzt
+- [x] Bewerbungsstatus mit `TextChoices` definiert
+- [x] Migration erstellt und angewendet
+- [x] Modelle im Django Admin geprüft
+
 ### Nächster Schritt
 
-**Meilenstein 3 – Django-Datenmodell**
+**Meilenstein 4 – REST API**
