@@ -221,6 +221,14 @@ Für die Beziehung zwischen `Application` und `Company` soll `PROTECT` statt `CA
 - [x] Architekturentscheidungen dokumentiert
 - [x] README für Meilenstein 1 konsolidiert
 
+### Meilenstein 2 – Backend-Grundlage
+
+- [x] Backend-Umgebung eingerichtet
+- [x] Django-Projekt erstellt
+- [x] Django-App `applications` erstellt
+- [x] Django REST Framework integriert
+- [x] Backend erfolgreich gestartet
+
 ### Nächster Schritt
 
-**Meilenstein 2 – Projektstruktur und Backend-Grundlage**
+**Meilenstein 3 – Django-Datenmodell**
