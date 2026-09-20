@@ -189,7 +189,45 @@ flowchart TD
     F -->|HTTP / JSON| API
     API --> D
     D -->|Django ORM| DB
+```
 
 
+<br>
 
+## Welche CRUD-Funktionen sind gebraucht
+
+Model `Company`:
+
+    CREATE          Unternehmen hinzufügen
+
+    READ            Unternehmen anzeigen
     
+    UPDATE          Unternehmen bearbeiten
+
+    DELETE          Unternehmen löschen
+
+Model `Application`:
+
+    CREATE          Bewerbung hinzufügen
+
+    READ            Bewerbung anzeigen
+    
+    UPDATE          Bewerbung bearbeiten
+
+    DELETE          Bewerbung löschen
+
+*Ich verwende `PROTECT` anstatt `CASCADE`, damit `Bewerbungen` nicht versehentlich zusammen mit einem `Unternehmen` gelöscht werden.*
+
+## Business Rules (Fachliche Regeln)
+
+* Jede `Application` gehört genau zu einer `Company`; eine `Company` kann mehrere `Applications` haben.
+* Für eine `Application` mit dem Status `geplant` darf kein `application_date` gesetzt sein.
+* `next_action` und `next_action_date` beschreiben den nächsten geplanten Schritt.
+* Eine `Application` gilt als **überfällig**, wenn `next_action_date` in der Vergangenheit liegt und die Application noch nicht abgeschlossen ist.
+
+## Architekturentscheidung
+
+* Für das MVP bleiben zwei Hauptmodelle: `Company` und `Application`.
+* `Application.status` speichert nur den aktuellen Status.
+* Eine separate `ApplicationStatusHistory` wird erst in Phase 2 eingeführt.
+* `overdue` wird aus den vorhandenen Daten berechnet und nicht als eigenes Boolean-Feld gespeichert.
