@@ -256,6 +256,15 @@ Für die Beziehung zwischen `Application` und `Company` soll `PROTECT` statt `CA
 - [x] Statusfilter getestet
 - [x] Suchfunktion getestet
 
+### Meilenstein 6 – Angular-Grundlage
+
+- [x] Angular-Projekt erstellt
+- [x] grundlegende Seiten erstellt
+- [x] Routing eingerichtet
+- [x] Navigation funktioniert
+- [x] Development Server geprüft
+- [x] Production Build geprüft
+
 ### Nächster Schritt
 
-**Meilenstein 6 – Angular-Grundlage**
+**Meilenstein 7 – Frontend-Backend-Integration**
