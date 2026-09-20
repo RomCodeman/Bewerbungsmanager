@@ -1,15 +1,27 @@
-# Python-Cache und temporäre Dateien
+# Environment variables
+.env
+.env.example
+
+# Python virtual environments
+.venv/
+.venv_bwrbngmngr/
+
+# Python cache / temporary files
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+
+# Testing / coverage
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Type checking
 .mypy_cache/
 
-# virtuelle Umgebungen
-.v_bwrbngmngr/
-
-# VS Code Einstellungen
+# IDE / editor settings
 .vscode/
+.idea/
+
+# Django
+db.sqlite3
