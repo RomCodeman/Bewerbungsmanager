@@ -1,49 +1,26 @@
 # Bewerbungsmanager (Application Tracker)
 
-## Das Ziel:
+## Projektziel
 
-Der Bewerbung Tracker soll dabei helfen, Bewerbungen zentral zu verwalten und den aktuellen Stand jeder Bewerbung schnell zu erkennen.
+Der Bewerbungsmanager soll dabei helfen, Bewerbungen zentral zu verwalten und den aktuellen Stand jeder Bewerbung schnell zu erkennen.
 
 Statt Informationen zu Bewerbungen über Notizen, Tabellen oder verschiedene Dateien zu verteilen, sollen die wichtigsten Daten an einem Ort strukturiert gespeichert werden.
 
 ## Hauptworkflow
 
-    Unternehmen anlegen
-            ↓
-    Bewerbung erstellen
-            ↓
-    Status verfolgen
-            ↓
-    Bewerbung aktualisieren
-            ↓
-    nächste Aktion / Ergebnis
+```text
+Unternehmen anlegen
+        ↓
+Bewerbung erstellen
+        ↓
+Status verfolgen
+        ↓
+Bewerbung aktualisieren
+        ↓
+nächste Aktion / Ergebnis
+```
 
-## Tech-Stack:
-    
-    | Bereich           | Technologie           |
-    |   ---             |    ---                |
-    | Frontend          | Angular               |
-    | Backend           | Django                |
-    | REST API          | Django REST Framework |
-    | Datenbank         | SQLite                |
-    | Kommunikation     | HTTP / JSON           |
-
-## Geplante MVP-Funktionen
-
-    1. Unternehmen erstellen
-    2. Unternehmen (eine Liste) anzeigen
-    3. Unternehmen bearbeiten
-    4. Unternehmen löschen
-
-    5. Bewerbung erstellen
-    6. Bewerbung einer Firma zuordnen
-    7. Bewerbungen anzeigen
-    8. Status ändern
-    9. Bewerbung bearbeiten
-    10. Bewerbung löschen
-
-
-
+## MVP-Funktionen
 
 ### Unternehmen
 
@@ -52,7 +29,7 @@ Statt Informationen zu Bewerbungen über Notizen, Tabellen oder verschiedene Dat
 - Unternehmen bearbeiten
 - Unternehmen löschen
 
-### Bewerbung
+### Bewerbungen
 
 - Bewerbung anlegen
 - Bewerbung einem Unternehmen zuordnen
@@ -61,121 +38,15 @@ Statt Informationen zu Bewerbungen über Notizen, Tabellen oder verschiedene Dat
 - Bewerbung löschen
 - Bewerbungsstatus verwalten
 
-### Bewerbungsstatus
+## Tech-Stack
 
-- Geplant
-- Beworben
-- Interview
-- Zusage
-- Absage
-
-### Dashboard Beispiel
-
-    Bewerbungen insgesamt: 18
-    
-    Geplant       3
-    Beworben      8
-    Interview     2
-    Zusage        1
-    Absage        4
-
-## Datenmodel
-
-### Vorläufiges Datenmodell
-
-Eine Firma kann mehrere Bewerbungen haben.
-
-    Company
-    │
-    │ 1
-    │
-    └──────────< Application
-                n
-
-### Modellansicht 
-
-    ┌─────────────────────┐
-    │       Company       │
-    ├─────────────────────┤
-    │ id                  │
-    │ name                │
-    │ website             │
-    │ city                │
-    │ career_url          │
-    │ notes               │
-    │ created_at          │
-    │ updated_at          │
-    └─────────┬───────────┘
-            │
-            │ 1
-            │
-            │ n
-    ┌─────────▼───────────┐
-    │     Application     │
-    ├─────────────────────┤
-    │ id                  │
-    │ company_id          │
-    │ position            │
-    │ status              │
-    │ application_date    │
-    │ job_url             │
-    │ contact_person      │
-    │ contact_email       │
-    │ next_action         │
-    │ next_action_date    │
-    │ notes               │
-    │ created_at          │
-    │ updated_at          │
-    └─────────────────────┘
-
-### Model Company (Unternehmen)
-
-Felder:
-
-    name            CharField           notwendig
-    website         URLField            optional
-    city            CharField           optional
-    career_url      URLField            optional
-    notes           TextField           optional
-    created_at      DateTimeField       auto
-    updated_at      DateTimeField       auto
-
-**Hinweis:**
-*Ich erstelle kein Feld für Ansprechpartner:innen, weil es nächste Situation sein könnte:*
-
-    Praktikum → Frau Müller
-    Junior Developer → Herr Schmidt
-    Werkstudent → Frau Becker
-
-### Model Application (Bewerbung)
-
-Felder:
-
-    company             ForeignKey      notwendig
-    position            CharField       notwendig
-    status              Choice          notwendig
-    application_date    DateField       optional
-    job_url             URLField        optional
-    contact_person      CharField       optional
-    contact_email       EmailField      optional
-    next_action         CharField       optional
-    next_action_date    DateField       optional
-    notes               TextField       optional
-    created_at          DateTimeField   auto
-    updated_at          DateTimeField   auto
-
-### Feld `status` des Modells `Application` (wählbar)
-
-Werte:
-
-    Jetzt           Später (mit Django)
-
-    PLANNED         Geplant
-    APPLIED         Beworben
-    INTERVIEW       Interview
-    ACCEPTED        Zusage
-    REJECTED        Absage
-
+| Bereich | Technologie |
+|---|---|
+| Frontend | Angular |
+| Backend | Django |
+| REST API | Django REST Framework |
+| Datenbank | SQLite |
+| Kommunikation | HTTP / JSON |
 
 ## Systemarchitektur
 
@@ -191,43 +62,165 @@ flowchart TD
     D -->|Django ORM| DB
 ```
 
+## Datenmodell
 
-<br>
+### Beziehung zwischen den Modellen
 
-## Welche CRUD-Funktionen sind gebraucht
+Eine `Company` kann mehrere `Applications` haben.
 
-Model `Company`:
+```text
+Company
+   1
+   │
+   └──────< Application
+              n
+```
 
-    CREATE          Unternehmen hinzufügen
+### Modellansicht
 
-    READ            Unternehmen anzeigen
-    
-    UPDATE          Unternehmen bearbeiten
+```text
+┌─────────────────────┐
+│       Company       │
+├─────────────────────┤
+│ id                  │
+│ name                │
+│ website             │
+│ city                │
+│ career_url          │
+│ notes               │
+│ created_at          │
+│ updated_at          │
+└─────────┬───────────┘
+          │
+          │ 1
+          │
+          │ n
+┌─────────▼───────────┐
+│     Application     │
+├─────────────────────┤
+│ id                  │
+│ company_id          │
+│ position            │
+│ status              │
+│ application_date    │
+│ job_url             │
+│ contact_person      │
+│ contact_email       │
+│ next_action         │
+│ next_action_date    │
+│ notes               │
+│ created_at          │
+│ updated_at          │
+└─────────────────────┘
+```
 
-    DELETE          Unternehmen löschen
+### Modell `Company`
 
-Model `Application`:
+| Feld | Django-Feld | Pflicht |
+|---|---|---|
+| `name` | `CharField` | ja |
+| `website` | `URLField` | nein |
+| `city` | `CharField` | nein |
+| `career_url` | `URLField` | nein |
+| `notes` | `TextField` | nein |
+| `created_at` | `DateTimeField` | automatisch |
+| `updated_at` | `DateTimeField` | automatisch |
 
-    CREATE          Bewerbung hinzufügen
+**Architekturhinweis:**  
+Kontaktpersonen werden nicht direkt in `Company` gespeichert, weil unterschiedliche Bewerbungen bei derselben Firma unterschiedliche Ansprechpartner haben können.
 
-    READ            Bewerbung anzeigen
-    
-    UPDATE          Bewerbung bearbeiten
+Beispiel:
 
-    DELETE          Bewerbung löschen
+```text
+Praktikum         → Frau Müller
+Junior Developer  → Herr Schmidt
+Werkstudent       → Frau Becker
+```
 
-*Ich verwende `PROTECT` anstatt `CASCADE`, damit `Bewerbungen` nicht versehentlich zusammen mit einem `Unternehmen` gelöscht werden.*
+### Modell `Application`
 
-## Business Rules (Fachliche Regeln)
+| Feld | Django-Feld | Pflicht |
+|---|---|---|
+| `company` | `ForeignKey` | ja |
+| `position` | `CharField` | ja |
+| `status` | `Choice` | ja |
+| `application_date` | `DateField` | nein |
+| `job_url` | `URLField` | nein |
+| `contact_person` | `CharField` | nein |
+| `contact_email` | `EmailField` | nein |
+| `next_action` | `CharField` | nein |
+| `next_action_date` | `DateField` | nein |
+| `notes` | `TextField` | nein |
+| `created_at` | `DateTimeField` | automatisch |
+| `updated_at` | `DateTimeField` | automatisch |
 
-* Jede `Application` gehört genau zu einer `Company`; eine `Company` kann mehrere `Applications` haben.
-* Für eine `Application` mit dem Status `geplant` darf kein `application_date` gesetzt sein.
-* `next_action` und `next_action_date` beschreiben den nächsten geplanten Schritt.
-* Eine `Application` gilt als **überfällig**, wenn `next_action_date` in der Vergangenheit liegt und die Application noch nicht abgeschlossen ist.
+> Optional bedeutet hier: Das Feld ist Teil des Modells, muss aber nicht zwingend ausgefüllt werden.
 
-## Architekturentscheidung
+## Bewerbungsstatus
 
-* Für das MVP bleiben zwei Hauptmodelle: `Company` und `Application`.
-* `Application.status` speichert nur den aktuellen Status.
-* Eine separate `ApplicationStatusHistory` wird erst in Phase 2 eingeführt.
-* `overdue` wird aus den vorhandenen Daten berechnet und nicht als eigenes Boolean-Feld gespeichert.
+| API-/DB-Wert | Anzeige |
+|---|---|
+| `PLANNED` | Geplant |
+| `APPLIED` | Beworben |
+| `INTERVIEW` | Interview |
+| `ACCEPTED` | Zusage |
+| `REJECTED` | Absage |
+
+## Benötigte CRUD-Funktionen
+
+### `Company`
+
+| Operation | Funktion |
+|---|---|
+| CREATE | Unternehmen hinzufügen |
+| READ | Unternehmen anzeigen |
+| UPDATE | Unternehmen bearbeiten |
+| DELETE | Unternehmen löschen |
+
+### `Application`
+
+| Operation | Funktion |
+|---|---|
+| CREATE | Bewerbung hinzufügen |
+| READ | Bewerbung anzeigen |
+| UPDATE | Bewerbung bearbeiten |
+| DELETE | Bewerbung löschen |
+
+Für die Beziehung zwischen `Application` und `Company` soll `PROTECT` statt `CASCADE` verwendet werden, damit Bewerbungen nicht versehentlich zusammen mit einem Unternehmen gelöscht werden.
+
+## Business Rules
+
+- Jede `Application` gehört genau zu einer `Company`; eine `Company` kann mehrere `Applications` haben.
+- Für eine `Application` mit dem Status `PLANNED` darf kein `application_date` gesetzt sein.
+- `next_action` und `next_action_date` beschreiben den nächsten geplanten Schritt.
+- Eine `Application` gilt als **überfällig**, wenn `next_action_date` in der Vergangenheit liegt und die Bewerbung noch nicht abgeschlossen ist.
+
+## Architekturentscheidungen
+
+- Für das MVP bleiben zwei Hauptmodelle: `Company` und `Application`.
+- `Application.status` speichert nur den aktuellen Status.
+- Eine separate `ApplicationStatusHistory` wird erst in Phase 2 eingeführt.
+- `overdue` wird aus den vorhandenen Daten berechnet und nicht als eigenes Boolean-Feld gespeichert.
+- Kontaktinformationen zu Ansprechpartnern werden auf Ebene der `Application` gespeichert, nicht auf Ebene der `Company`.
+
+## Geplante Erweiterungen – Phase 2
+
+- Dashboard mit Statistiken
+- Überfällige Follow-ups
+- Filter „keine Antwort seit mehr als 14 Tagen“
+- `ApplicationStatusHistory`
+
+## Projektstatus
+
+### Meilenstein 1 – Projektdefinition und Datenmodell
+
+- [x] Projektidee, Hauptworkflow, MVP und Definition of Done definiert
+- [x] Fachliche Anforderungen definiert
+- [x] Datenmodell entworfen
+- [x] Status und Business Rules definiert
+- [x] Architekturentscheidungen dokumentiert
+- [x] README für Meilenstein 1 konsolidiert
+
+### Nächster Schritt
+
+**Meilenstein 2 – Projektstruktur und Backend-Grundlage**
