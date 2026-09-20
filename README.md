@@ -276,6 +276,15 @@ Für die Beziehung zwischen `Application` und `Company` soll `PROTECT` statt `CA
 - [x] grundlegende Fehlerbehandlung ergänzt
 - [x] Frontend-Backend-Verbindung geprüft
 
+### Meilenstein 8 – Frontend CRUD
+
+- [x] Companies über Angular erstellen
+- [x] Companies bearbeiten und löschen
+- [x] Applications erstellen
+- [x] Applications bearbeiten und löschen
+- [x] Unternehmen und Status auswählbar
+- [x] Frontend mit Backend-Validierung geprüft
+
 ### Nächster Schritt
 
-**Meilenstein 8 – Frontend CRUD**
+**Meilenstein 9 – MVP-Finish und UX**
