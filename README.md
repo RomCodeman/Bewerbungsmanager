@@ -6,6 +6,18 @@ Der Bewerbung Tracker soll dabei helfen, Bewerbungen zentral zu verwalten und de
 
 Statt Informationen zu Bewerbungen über Notizen, Tabellen oder verschiedene Dateien zu verteilen, sollen die wichtigsten Daten an einem Ort strukturiert gespeichert werden.
 
+## Hauptworkflow
+
+    Unternehmen anlegen
+            ↓
+    Bewerbung erstellen
+            ↓
+    Status verfolgen
+            ↓
+    Bewerbung aktualisieren
+            ↓
+    nächste Aktion / Ergebnis
+
 ## Tech-Stack:
     
     | Bereich           | Technologie           |
@@ -17,6 +29,21 @@ Statt Informationen zu Bewerbungen über Notizen, Tabellen oder verschiedene Dat
     | Kommunikation     | HTTP / JSON           |
 
 ## Geplante MVP-Funktionen
+
+    1. Unternehmen erstellen
+    2. Unternehmen (eine Liste) anzeigen
+    3. Unternehmen bearbeiten
+    4. Unternehmen löschen
+
+    5. Bewerbung erstellen
+    6. Bewerbung einer Firma zuordnen
+    7. Bewerbungen anzeigen
+    8. Status ändern
+    9. Bewerbung bearbeiten
+    10. Bewerbung löschen
+
+
+
 
 ### Unternehmen
 
@@ -42,6 +69,16 @@ Statt Informationen zu Bewerbungen über Notizen, Tabellen oder verschiedene Dat
 - Zusage
 - Absage
 
+### Dashboard Beispiel
+
+    Bewerbungen insgesamt: 18
+    
+    Geplant       3
+    Beworben      8
+    Interview     2
+    Zusage        1
+    Absage        4
+
 ## Datenmodel
 ...
 
@@ -57,3 +94,7 @@ flowchart TD
     F -->|HTTP / JSON| API
     API --> D
     D -->|Django ORM| DB
+
+
+
+    
