@@ -1,3 +1,29 @@
 <h1>Unternehmen</h1>
 
-<p>Hier werden Unternehmen verwaltet.</p>
+@if (errorMessage()) {
+  <p>{{ errorMessage() }}</p>
+}
+
+@if (companies().length === 0 && !errorMessage()) {
+  <p>Keine Unternehmen vorhanden.</p>
+}
+
+@for (company of companies(); track company.id) {
+  <article>
+    <h2>{{ company.name }}</h2>
+
+    @if (company.city) {
+      <p>Ort: {{ company.city }}</p>
+    }
+
+    @if (company.website) {
+      <a
+        [href]="company.website"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Website
+      </a>
+    }
+  </article>
+}
