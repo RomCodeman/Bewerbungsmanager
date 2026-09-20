@@ -237,6 +237,16 @@ Für die Beziehung zwischen `Application` und `Company` soll `PROTECT` statt `CA
 - [x] Migration erstellt und angewendet
 - [x] Modelle im Django Admin geprüft
 
+### Meilenstein 4 – REST API
+
+- [x] Serializer für Company und Application implementiert
+- [x] Business Validation hinzugefügt
+- [x] CRUD-Endpunkte erstellt
+- [x] API-Routing konfiguriert
+- [x] Suche implementiert
+- [x] Filter nach Bewerbungsstatus implementiert
+- [x] API manuell geprüft
+
 ### Nächster Schritt
 
-**Meilenstein 4 – REST API**
+**Meilenstein 5 – Backend-Tests**
