@@ -1,34 +1,101 @@
 <h1>Bewerbungen</h1>
 
+<form [formGroup]="form" (ngSubmit)="save()">
+  <label>
+    Unternehmen
+    <select formControlName="company">
+      <option [ngValue]="null">Unternehmen auswählen</option>
+
+      @for (company of companies(); track company.id) {
+        <option [ngValue]="company.id">
+          {{ company.name }}
+        </option>
+      }
+    </select>
+  </label>
+
+  <label>
+    Position
+    <input formControlName="position" />
+  </label>
+
+  <label>
+    Status
+    <select formControlName="status">
+      @for (status of statuses; track status.value) {
+        <option [value]="status.value">
+          {{ status.label }}
+        </option>
+      }
+    </select>
+  </label>
+
+  <label>
+    Bewerbungsdatum
+    <input type="date" formControlName="application_date" />
+  </label>
+
+  <label>
+    Stellenanzeige
+    <input formControlName="job_url" />
+  </label>
+
+  <label>
+    Ansprechpartner
+    <input formControlName="contact_person" />
+  </label>
+
+  <label>
+    E-Mail
+    <input type="email" formControlName="contact_email" />
+  </label>
+
+  <label>
+    Nächster Schritt
+    <input formControlName="next_action" />
+  </label>
+
+  <label>
+    Datum der nächsten Aktion
+    <input type="date" formControlName="next_action_date" />
+  </label>
+
+  <label>
+    Notizen
+    <textarea formControlName="notes"></textarea>
+  </label>
+
+  <button type="submit" [disabled]="form.invalid">
+    {{ editingId() === null ? 'Hinzufügen' : 'Speichern' }}
+  </button>
+
+  @if (editingId() !== null) {
+    <button type="button" (click)="resetForm()">Abbrechen</button>
+  }
+</form>
+
 @if (errorMessage()) {
   <p>{{ errorMessage() }}</p>
 }
 
-@if (applications().length === 0 && !errorMessage()) {
-  <p>Keine Bewerbungen vorhanden.</p>
-}
+<hr />
 
 @for (application of applications(); track application.id) {
   <article>
     <h2>{{ application.position }}</h2>
 
     <p>
+      Unternehmen:
+      {{ companyName(application.company) }}
+    </p>
+
+    <p>
       Status:
       {{ application.status_display }}
     </p>
 
-    @if (application.application_date) {
-      <p>
-        Bewerbungsdatum:
-        {{ application.application_date }}
-      </p>
-    }
+    <button type="button" (click)="edit(application)">Bearbeiten</button>
 
-    @if (application.next_action) {
-      <p>
-        Nächster Schritt:
-        {{ application.next_action }}
-      </p>
-    }
+    <button type="button" (click)="delete(application)">Löschen</button>
   </article>
 }
