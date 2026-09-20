@@ -80,7 +80,102 @@ Statt Informationen zu Bewerbungen über Notizen, Tabellen oder verschiedene Dat
     Absage        4
 
 ## Datenmodel
-...
+
+### Vorläufiges Datenmodell
+
+Eine Firma kann mehrere Bewerbungen haben.
+
+    Company
+    │
+    │ 1
+    │
+    └──────────< Application
+                n
+
+### Modellansicht 
+
+    ┌─────────────────────┐
+    │       Company       │
+    ├─────────────────────┤
+    │ id                  │
+    │ name                │
+    │ website             │
+    │ city                │
+    │ career_url          │
+    │ notes               │
+    │ created_at          │
+    │ updated_at          │
+    └─────────┬───────────┘
+            │
+            │ 1
+            │
+            │ n
+    ┌─────────▼───────────┐
+    │     Application     │
+    ├─────────────────────┤
+    │ id                  │
+    │ company_id          │
+    │ position            │
+    │ status              │
+    │ application_date    │
+    │ job_url             │
+    │ contact_person      │
+    │ contact_email       │
+    │ next_action         │
+    │ next_action_date    │
+    │ notes               │
+    │ created_at          │
+    │ updated_at          │
+    └─────────────────────┘
+
+### Model Company (Unternehmen)
+
+Felder:
+
+    name            CharField           notwendig
+    website         URLField            optional
+    city            CharField           optional
+    career_url      URLField            optional
+    notes           TextField           optional
+    created_at      DateTimeField       auto
+    updated_at      DateTimeField       auto
+
+**Hinweis:**
+*Ich erstelle kein Feld für Ansprechpartner:innen, weil es nächste Situation sein könnte:*
+
+    Praktikum → Frau Müller
+    Junior Developer → Herr Schmidt
+    Werkstudent → Frau Becker
+
+### Model Application (Bewerbung)
+
+Felder:
+
+    company             ForeignKey      notwendig
+    position            CharField       notwendig
+    status              Choice          notwendig
+    application_date    DateField       optional
+    job_url             URLField        optional
+    contact_person      CharField       optional
+    contact_email       EmailField      optional
+    next_action         CharField       optional
+    next_action_date    DateField       optional
+    notes               TextField       optional
+    created_at          DateTimeField   auto
+    updated_at          DateTimeField   auto
+
+### Feld `status` des Modells `Application` (wählbar)
+
+Werte:
+
+    Jetzt           Später (mit Django)
+
+    PLANNED         Geplant
+    APPLIED         Beworben
+    INTERVIEW       Interview
+    ACCEPTED        Zusage
+    REJECTED        Absage
+
 
 ## Systemarchitektur
 
