@@ -265,6 +265,17 @@ Für die Beziehung zwischen `Application` und `Company` soll `PROTECT` statt `CA
 - [x] Development Server geprüft
 - [x] Production Build geprüft
 
+### Meilenstein 7 – Frontend-Backend-Integration
+
+- [x] CORS für Angular konfiguriert
+- [x] HttpClient eingerichtet
+- [x] TypeScript-Datenmodelle erstellt
+- [x] API-Services implementiert
+- [x] Unternehmen über REST API geladen
+- [x] Bewerbungen über REST API geladen
+- [x] grundlegende Fehlerbehandlung ergänzt
+- [x] Frontend-Backend-Verbindung geprüft
+
 ### Nächster Schritt
 
-**Meilenstein 7 – Frontend-Backend-Integration**
+**Meilenstein 8 – Frontend CRUD**
