@@ -247,6 +247,15 @@ Für die Beziehung zwischen `Application` und `Company` soll `PROTECT` statt `CA
 - [x] Filter nach Bewerbungsstatus implementiert
 - [x] API manuell geprüft
 
+### Meilenstein 5 – Backend-Tests
+
+- [x] Datenmodell getestet
+- [x] `PROTECT`-Verhalten getestet
+- [x] REST-API getestet
+- [x] Business Validation getestet
+- [x] Statusfilter getestet
+- [x] Suchfunktion getestet
+
 ### Nächster Schritt
 
-**Meilenstein 5 – Backend-Tests**
+**Meilenstein 6 – Angular-Grundlage**
