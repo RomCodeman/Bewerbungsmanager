@@ -1,29 +1,56 @@
 <h1>Unternehmen</h1>
 
+<form [formGroup]="form" (ngSubmit)="save()">
+  <label>
+    Name
+    <input formControlName="name" />
+  </label>
+
+  <label>
+    Website
+    <input formControlName="website" />
+  </label>
+
+  <label>
+    Ort
+    <input formControlName="city" />
+  </label>
+
+  <label>
+    Karriere-URL
+    <input formControlName="career_url" />
+  </label>
+
+  <label>
+    Notizen
+    <textarea formControlName="notes"></textarea>
+  </label>
+
+  <button type="submit" [disabled]="form.invalid">
+    {{ editingId() === null ? 'Hinzufügen' : 'Speichern' }}
+  </button>
+
+  @if (editingId() !== null) {
+    <button type="button" (click)="resetForm()">Abbrechen</button>
+  }
+</form>
+
 @if (errorMessage()) {
   <p>{{ errorMessage() }}</p>
 }
 
-@if (companies().length === 0 && !errorMessage()) {
-  <p>Keine Unternehmen vorhanden.</p>
-}
+<hr />
 
 @for (company of companies(); track company.id) {
   <article>
     <h2>{{ company.name }}</h2>
 
     @if (company.city) {
-      <p>Ort: {{ company.city }}</p>
+      <p>{{ company.city }}</p>
     }
 
-    @if (company.website) {
-      <a
-        [href]="company.website"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Website
-      </a>
-    }
+    <button type="button" (click)="edit(company)">Bearbeiten</button>
+
+    <button type="button" (click)="delete(company)">Löschen</button>
   </article>
 }
