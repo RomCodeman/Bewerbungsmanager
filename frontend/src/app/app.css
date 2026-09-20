@@ -1,0 +1,12 @@
+header {
+  padding: 1rem;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+}
+
+main {
+  padding: 1rem;
+}
