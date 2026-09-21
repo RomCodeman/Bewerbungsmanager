@@ -1,14 +1,13 @@
+from datetime import timedelta
+
 from django.test import TestCase
+from django.utils import timezone
 from django.db.models.deletion import ProtectedError
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from .models import Application, Company
-
-from datetime import timedelta
-
-from django.utils import timezone
 
 
 # Create your tests here.

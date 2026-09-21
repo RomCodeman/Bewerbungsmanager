@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 
 import { Company } from '../models/company';
 
+import { API_BASE_URL } from '../config/api';
+
 export type CompanyPayload = Omit<Company, 'id' | 'created_at' | 'updated_at'>;
 
 @Injectable({
@@ -12,7 +14,7 @@ export type CompanyPayload = Omit<Company, 'id' | 'created_at' | 'updated_at'>;
 export class CompanyApi {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'http://127.0.0.1:8000/api/companies/';
+  private readonly apiUrl = `${API_BASE_URL}/companies/`;
 
   getAll(): Observable<Company[]> {
     return this.http.get<Company[]>(this.apiUrl);

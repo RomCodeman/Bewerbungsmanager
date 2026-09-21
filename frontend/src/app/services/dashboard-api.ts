@@ -4,13 +4,15 @@ import { Observable } from 'rxjs';
 
 import { DashboardStats } from '../models/dashboard-stats';
 
+import { API_BASE_URL } from '../config/api';
+
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardApi {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'http://127.0.0.1:8000/api/dashboard/';
+  private readonly apiUrl = `${API_BASE_URL}/dashboard/`;
 
   getStats(): Observable<DashboardStats> {
     return this.http.get<DashboardStats>(this.apiUrl);
