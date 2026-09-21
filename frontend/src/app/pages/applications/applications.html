@@ -100,10 +100,16 @@
         {{ companyName(application.company) }}
       </p>
 
-      <p>
-        Status:
+      <span
+        class="status"
+        [class.status-planned]="application.status === 'PLANNED'"
+        [class.status-applied]="application.status === 'APPLIED'"
+        [class.status-interview]="application.status === 'INTERVIEW'"
+        [class.status-accepted]="application.status === 'ACCEPTED'"
+        [class.status-rejected]="application.status === 'REJECTED'"
+      >
         {{ application.status_display }}
-      </p>
+      </span>
 
       <button type="button" (click)="edit(application)">Bearbeiten</button>
 

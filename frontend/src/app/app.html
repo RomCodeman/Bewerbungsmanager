@@ -1,13 +1,17 @@
-<header>
-  <h1>Bewerbungsmanager</h1>
+<header class="app-header">
+  <div class="app-header__content">
+    <a class="brand" routerLink="/dashboard"> Bewerbungsmanager </a>
 
-  <nav>
-    <a routerLink="/dashboard">Dashboard</a>
-    <a routerLink="/companies">Unternehmen</a>
-    <a routerLink="/applications">Bewerbungen</a>
-  </nav>
+    <nav>
+      <a routerLink="/dashboard"> Dashboard </a>
+
+      <a routerLink="/companies"> Unternehmen </a>
+
+      <a routerLink="/applications"> Bewerbungen </a>
+    </nav>
+  </div>
 </header>
 
-<main>
+<main class="page">
   <router-outlet></router-outlet>
 </main>
