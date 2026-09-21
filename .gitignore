@@ -24,19 +24,40 @@ media/
 .coverage
 htmlcov/
 
-# IDE
-.vscode/
-.idea/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-
 # Angular / Node.js
 node_modules/
 dist/
 .angular/
 coverage/
+tmp/
+out-tsc/
+bazel-out/
+
+# Node logs
+npm-debug.log
+yarn-error.log
+
+# Angular / tooling
+.sass-cache/
+connect.lock
+testem.log
+typings/
+__screenshots__/
+
+# IDE
+.vscode/
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.history/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

@@ -26,20 +26,28 @@ export class Companies implements OnInit {
     notes: [''],
   });
 
+  readonly isLoading = signal(false);
+
   ngOnInit(): void {
     this.loadCompanies();
   }
 
   loadCompanies(): void {
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
     this.companyApi.getAll().subscribe({
       next: (companies) => {
         this.companies.set(companies);
+        this.isLoading.set(false);
       },
       error: () => {
         this.errorMessage.set('Unternehmen konnten nicht geladen werden.');
+        this.isLoading.set(false);
       },
     });
   }
+
   save(): void {
     if (this.form.invalid) {
       return;
@@ -98,7 +106,10 @@ export class Companies implements OnInit {
         this.loadCompanies();
       },
       error: () => {
-        this.errorMessage.set('Unternehmen konnte nicht gelöscht werden.');
+        this.errorMessage.set(
+          'Das Unternehmen kann nicht gelöscht werden, ' +
+            'solange Bewerbungen damit verknüpft sind.',
+        );
       },
     });
   }

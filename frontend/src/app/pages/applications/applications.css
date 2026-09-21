@@ -1,0 +1,27 @@
+.status {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.status-planned {
+  background: #e5e7eb;
+}
+
+.status-applied {
+  background: #dbeafe;
+}
+
+.status-interview {
+  background: #fef3c7;
+}
+
+.status-accepted {
+  background: #dcfce7;
+}
+
+.status-rejected {
+  background: #fee2e2;
+}
