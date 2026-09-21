@@ -285,6 +285,21 @@ Für die Beziehung zwischen `Application` und `Company` soll `PROTECT` statt `CA
 - [x] Unternehmen und Status auswählbar
 - [x] Frontend mit Backend-Validierung geprüft
 
+### Meilenstein 9 – MVP-Finish und UX
+
+- [x] Loading-, Empty- und Error-Zustände verbessert
+- [x] API-Validierungsfehler verständlicher dargestellt
+- [x] Löschfehler verständlich behandelt
+- [x] Statusdarstellung verbessert
+- [x] Formulare und Layout vereinheitlicht
+- [x] vollständigen Benutzer-Workflow geprüft
+- [x] Backend-Tests erfolgreich
+- [x] Angular Production Build erfolgreich
+
+### MVP-Status
+
+Der funktionale MVP des Bewerbungsmanagers ist abgeschlossen.
+
 ### Nächster Schritt
 
-**Meilenstein 9 – MVP-Finish und UX**
+**Meilenstein 10 – Portfolio-Finish**
