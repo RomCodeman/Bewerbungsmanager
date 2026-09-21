@@ -9,6 +9,8 @@ import { ApplicationApi, ApplicationPayload } from '../../services/application-a
 
 import { CompanyApi } from '../../services/company-api';
 
+import { HttpErrorResponse } from '@angular/common/http';
+
 @Component({
   selector: 'app-applications',
   imports: [ReactiveFormsModule],
@@ -51,18 +53,25 @@ export class Applications implements OnInit {
     notes: [''],
   });
 
+  readonly isLoading = signal(false);
+
   ngOnInit(): void {
     this.loadApplications();
     this.loadCompanies();
   }
 
   loadApplications(): void {
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
     this.applicationApi.getAll().subscribe({
       next: (applications) => {
         this.applications.set(applications);
+        this.isLoading.set(false);
       },
       error: () => {
         this.errorMessage.set('Bewerbungen konnten nicht geladen werden.');
+        this.isLoading.set(false);
       },
     });
   }
@@ -108,8 +117,8 @@ export class Applications implements OnInit {
           this.resetForm();
           this.loadApplications();
         },
-        error: () => {
-          this.errorMessage.set('Bewerbung konnte nicht erstellt werden.');
+        error: (error: HttpErrorResponse) => {
+          this.handleApiError(error);
         },
       });
 
@@ -181,5 +190,16 @@ export class Applications implements OnInit {
 
   companyName(companyId: number): string {
     return this.companies().find((company) => company.id === companyId)?.name ?? 'Unbekannt';
+  }
+
+  private handleApiError(error: HttpErrorResponse): void {
+    const applicationDateErrors = error.error?.application_date;
+
+    if (Array.isArray(applicationDateErrors) && applicationDateErrors.length > 0) {
+      this.errorMessage.set(applicationDateErrors[0]);
+      return;
+    }
+
+    this.errorMessage.set('Die Aktion konnte nicht ausgeführt werden.');
   }
 }

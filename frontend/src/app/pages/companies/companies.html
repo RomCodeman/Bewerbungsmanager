@@ -35,8 +35,28 @@
   }
 </form>
 
+@if (isLoading()) {
+  <p>Daten werden geladen...</p>
+}
+
 @if (errorMessage()) {
-  <p>{{ errorMessage() }}</p>
+  <p class="message error">
+    {{ errorMessage() }}
+  </p>
+}
+
+@if (
+  !isLoading() &&
+  !errorMessage() &&
+  companies().length === 0
+) {
+  <p>Noch keine Unternehmen vorhanden.</p>
+}
+
+@if (!isLoading()) {
+  @for (company of companies(); track company.id) {
+    <!-- Company -->
+  }
 }
 
 <hr />

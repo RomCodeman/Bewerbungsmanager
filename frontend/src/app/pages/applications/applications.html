@@ -74,28 +74,40 @@
   }
 </form>
 
+@if (isLoading()) {
+  <p>Daten werden geladen...</p>
+}
+
 @if (errorMessage()) {
-  <p>{{ errorMessage() }}</p>
+  <p class="message error">
+    {{ errorMessage() }}
+  </p>
+}
+
+@if (!isLoading() && !errorMessage() && applications().length === 0) {
+  <p>Noch keine Bewerbungen vorhanden.</p>
 }
 
 <hr />
 
-@for (application of applications(); track application.id) {
-  <article>
-    <h2>{{ application.position }}</h2>
+@if (!isLoading() && !errorMessage()) {
+  @for (application of applications(); track application.id) {
+    <article>
+      <h2>{{ application.position }}</h2>
 
-    <p>
-      Unternehmen:
-      {{ companyName(application.company) }}
-    </p>
+      <p>
+        Unternehmen:
+        {{ companyName(application.company) }}
+      </p>
 
-    <p>
-      Status:
-      {{ application.status_display }}
-    </p>
+      <p>
+        Status:
+        {{ application.status_display }}
+      </p>
 
-    <button type="button" (click)="edit(application)">Bearbeiten</button>
+      <button type="button" (click)="edit(application)">Bearbeiten</button>
 
-    <button type="button" (click)="delete(application)">Löschen</button>
-  </article>
+      <button type="button" (click)="delete(application)">Löschen</button>
+    </article>
+  }
 }
