@@ -1,7 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Company } from '../../models/company';
+import { getApiErrorMessage } from '../../utils/api-error';
 import { CompanyApi, CompanyPayload } from '../../services/company-api';
 
 @Component({
@@ -41,8 +43,11 @@ export class Companies implements OnInit {
         this.companies.set(companies);
         this.isLoading.set(false);
       },
-      error: () => {
-        this.errorMessage.set('Unternehmen konnten nicht geladen werden.');
+
+      error: (error: HttpErrorResponse) => {
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'Unternehmen konnten nicht geladen werden.'),
+        );
         this.isLoading.set(false);
       },
     });
@@ -63,8 +68,10 @@ export class Companies implements OnInit {
           this.resetForm();
           this.loadCompanies();
         },
-        error: () => {
-          this.errorMessage.set('Unternehmen konnte nicht erstellt werden.');
+        error: (error: HttpErrorResponse) => {
+          this.errorMessage.set(
+            getApiErrorMessage(error, 'Unternehmen konnte nicht erstellt werden.'),
+          );
         },
       });
 
@@ -76,8 +83,11 @@ export class Companies implements OnInit {
         this.resetForm();
         this.loadCompanies();
       },
-      error: () => {
-        this.errorMessage.set('Unternehmen konnte nicht aktualisiert werden.');
+
+      error: (error: HttpErrorResponse) => {
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'Unternehmen konnte nicht aktualisiert werden.'),
+        );
       },
     });
   }
@@ -105,10 +115,10 @@ export class Companies implements OnInit {
       next: () => {
         this.loadCompanies();
       },
-      error: () => {
+
+      error: (error: HttpErrorResponse) => {
         this.errorMessage.set(
-          'Das Unternehmen kann nicht gelöscht werden, ' +
-            'solange Bewerbungen damit verknüpft sind.',
+          getApiErrorMessage(error, 'Unternehmen konnte nicht gelöscht werden.'),
         );
       },
     });

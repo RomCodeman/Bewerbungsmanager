@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -9,7 +10,7 @@ import { ApplicationApi, ApplicationPayload } from '../../services/application-a
 
 import { CompanyApi } from '../../services/company-api';
 
-import { HttpErrorResponse } from '@angular/common/http';
+import { getApiErrorMessage } from '../../utils/api-error';
 
 @Component({
   selector: 'app-applications',
@@ -69,8 +70,12 @@ export class Applications implements OnInit {
         this.applications.set(applications);
         this.isLoading.set(false);
       },
-      error: () => {
-        this.errorMessage.set('Bewerbungen konnten nicht geladen werden.');
+
+      error: (error: HttpErrorResponse) => {
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'Bewerbungen konnten nicht geladen werden.'),
+        );
+
         this.isLoading.set(false);
       },
     });
@@ -81,11 +86,15 @@ export class Applications implements OnInit {
       next: (companies) => {
         this.companies.set(companies);
       },
-      error: () => {
-        this.errorMessage.set('Unternehmen konnten nicht geladen werden.');
+
+      error: (error: HttpErrorResponse) => {
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'Unternehmen konnten nicht geladen werden.'),
+        );
       },
     });
   }
+
   private buildPayload(): ApplicationPayload {
     const value = this.form.getRawValue();
 
@@ -117,8 +126,11 @@ export class Applications implements OnInit {
           this.resetForm();
           this.loadApplications();
         },
+
         error: (error: HttpErrorResponse) => {
-          this.handleApiError(error);
+          this.errorMessage.set(
+            getApiErrorMessage(error, 'Bewerbung konnte nicht erstellt werden.'),
+          );
         },
       });
 
@@ -130,8 +142,11 @@ export class Applications implements OnInit {
         this.resetForm();
         this.loadApplications();
       },
-      error: () => {
-        this.errorMessage.set('Bewerbung konnte nicht aktualisiert werden.');
+
+      error: (error: HttpErrorResponse) => {
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'Bewerbung konnte nicht aktualisiert werden.'),
+        );
       },
     });
   }
@@ -164,8 +179,9 @@ export class Applications implements OnInit {
       next: () => {
         this.loadApplications();
       },
-      error: () => {
-        this.errorMessage.set('Bewerbung konnte nicht gelöscht werden.');
+
+      error: (error: HttpErrorResponse) => {
+        this.errorMessage.set(getApiErrorMessage(error, 'Bewerbung konnte nicht gelöscht werden.'));
       },
     });
   }
@@ -190,16 +206,5 @@ export class Applications implements OnInit {
 
   companyName(companyId: number): string {
     return this.companies().find((company) => company.id === companyId)?.name ?? 'Unbekannt';
-  }
-
-  private handleApiError(error: HttpErrorResponse): void {
-    const applicationDateErrors = error.error?.application_date;
-
-    if (Array.isArray(applicationDateErrors) && applicationDateErrors.length > 0) {
-      this.errorMessage.set(applicationDateErrors[0]);
-      return;
-    }
-
-    this.errorMessage.set('Die Aktion konnte nicht ausgeführt werden.');
   }
 }
