@@ -74,3 +74,13 @@ nav {
 .brand {
   font-weight: 700;
 }
+
+@media (max-width: 700px) {
+  .app-header__content {
+    flex-direction: column;
+  }
+
+  nav {
+    flex-wrap: wrap;
+  }
+}
