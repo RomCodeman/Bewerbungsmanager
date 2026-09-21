@@ -1,7 +1,13 @@
-from rest_framework import filters, viewsets
-
 from .models import Application, Company
 from .serializers import ApplicationSerializer, CompanySerializer
+
+import logging
+
+from django.db.models.deletion import ProtectedError
+from rest_framework import filters, status, viewsets
+from rest_framework.response import Response
+
+logger = logging.getLogger(__name__)
 
 
 # Create your views here.
@@ -10,6 +16,29 @@ class CompanyViewSet(viewsets.ModelViewSet):
     serializer_class = CompanySerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ["name", "city"]
+
+    def destroy(self, request, *args, **kwargs):
+        company = self.get_object()
+
+        try:
+            self.perform_destroy(company)
+        except ProtectedError:
+            logger.warning(
+                "Blocked deletion of company id=%s because applications exist",
+                company.pk,
+            )
+
+            return Response(
+                {
+                    "detail": (
+                        "Das Unternehmen kann nicht gelöscht werden, "
+                        "solange Bewerbungen damit verknüpft sind."
+                    )
+                },
+                status=status.HTTP_409_CONFLICT,
+            )
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ApplicationViewSet(viewsets.ModelViewSet):
@@ -31,3 +60,15 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(status=status)
 
         return queryset
+
+    def perform_update(self, serializer):
+        previous_status = serializer.instance.status
+        application = serializer.save()
+
+        if previous_status != application.status:
+            logger.info(
+                "Application id=%s status changed from %s to %s",
+                application.pk,
+                previous_status,
+                application.status,
+            )

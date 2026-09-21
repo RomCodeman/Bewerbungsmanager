@@ -43,6 +43,30 @@ class ApplicationModelTests(TestCase):
         with self.assertRaises(ProtectedError):
             self.company.delete()
 
+    def test_company_with_application_cannot_be_deleted_via_api(self):
+        Application.objects.create(
+            company=self.company,
+            position="Pflichtpraktikum FIAE",
+            status=Application.Status.APPLIED,
+        )
+
+        response = self.client.delete(
+            reverse(
+                "company-detail",
+                args=[self.company.id],
+            )
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_409_CONFLICT,
+        )
+
+        self.assertIn(
+            "detail",
+            response.data,
+        )
+
 
 class ApplicationAPITests(APITestCase):
     def setUp(self):
