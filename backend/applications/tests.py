@@ -6,6 +6,10 @@ from rest_framework.test import APITestCase
 
 from .models import Application, Company
 
+from datetime import timedelta
+
+from django.utils import timezone
+
 
 # Create your tests here.
 class ApplicationModelTests(TestCase):
@@ -42,6 +46,30 @@ class ApplicationModelTests(TestCase):
 
         with self.assertRaises(ProtectedError):
             self.company.delete()
+
+    def test_company_with_application_cannot_be_deleted_via_api(self):
+        Application.objects.create(
+            company=self.company,
+            position="Pflichtpraktikum FIAE",
+            status=Application.Status.APPLIED,
+        )
+
+        response = self.client.delete(
+            reverse(
+                "company-detail",
+                args=[self.company.id],
+            )
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_409_CONFLICT,
+        )
+
+        self.assertIn(
+            "detail",
+            response.data,
+        )
 
 
 class ApplicationAPITests(APITestCase):
@@ -156,4 +184,55 @@ class ApplicationAPITests(APITestCase):
         self.assertEqual(
             response.data[0]["name"],
             "Beispiel GmbH",
+        )
+
+
+class DashboardAPITests(APITestCase):
+    def setUp(self):
+        self.company = Company.objects.create(
+            name="Dashboard GmbH",
+        )
+
+        Application.objects.create(
+            company=self.company,
+            position="Python Praktikum",
+            status=Application.Status.APPLIED,
+            application_date=timezone.localdate(),
+            next_action="Nachfragen",
+            next_action_date=(timezone.localdate() - timedelta(days=1)),
+        )
+
+        Application.objects.create(
+            company=self.company,
+            position="Backend Praktikum",
+            status=Application.Status.INTERVIEW,
+            application_date=timezone.localdate(),
+        )
+
+    def test_dashboard_returns_statistics(self):
+        response = self.client.get(reverse("dashboard"))
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK,
+        )
+
+        self.assertEqual(
+            response.data["applications_total"],
+            2,
+        )
+
+        self.assertEqual(
+            response.data["by_status"]["APPLIED"],
+            1,
+        )
+
+        self.assertEqual(
+            response.data["by_status"]["INTERVIEW"],
+            1,
+        )
+
+        self.assertEqual(
+            response.data["overdue_follow_ups"],
+            1,
         )

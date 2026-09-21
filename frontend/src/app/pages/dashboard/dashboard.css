@@ -1,0 +1,20 @@
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.dashboard-grid article {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+}
+
+.dashboard-grid span {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-grid strong {
+  font-size: 1.8rem;
+}

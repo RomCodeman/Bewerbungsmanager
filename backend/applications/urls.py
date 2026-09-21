@@ -2,6 +2,14 @@ from rest_framework.routers import DefaultRouter
 
 from .views import ApplicationViewSet, CompanyViewSet
 
+from django.urls import path
+
+from .views import (
+    ApplicationViewSet,
+    CompanyViewSet,
+    DashboardView,
+)
+
 router = DefaultRouter()
 
 router.register(
@@ -16,4 +24,11 @@ router.register(
     basename="application",
 )
 
-urlpatterns = router.urls
+urlpatterns = [
+    path(
+        "dashboard/",
+        DashboardView.as_view(),
+        name="dashboard",
+    ),
+    *router.urls,
+]
