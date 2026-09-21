@@ -1,167 +1,91 @@
-# Bewerbungsmanager (Application Tracker)
+# Bewerbungsmanager
 
-## Projektziel
+Eine Full-Stack-Webanwendung zur strukturierten Verwaltung von Unternehmen, Bewerbungen, Bewerbungsstatus und Follow-ups.
 
-Der Bewerbungsmanager soll dabei helfen, Bewerbungen zentral zu verwalten und den aktuellen Stand jeder Bewerbung schnell zu erkennen.
+Das Projekt entstand als Portfolio- und Lernprojekt im Rahmen meiner Umschulung zum **Fachinformatiker für Anwendungsentwicklung (FIAE)**. Ziel war es, einen vollständigen Entwicklungsprozess praktisch umzusetzen: von der fachlichen Planung und Datenmodellierung über eine REST-API bis zur Integration eines Angular-Frontends.
 
-Statt Informationen zu Bewerbungen über Notizen, Tabellen oder verschiedene Dateien zu verteilen, sollen die wichtigsten Daten an einem Ort strukturiert gespeichert werden.
+<!--
+## Screenshots
 
-## Hauptworkflow
+> Die Bilddateien können nach dem finalen Portfolio-Check unter
+> `docs/screenshots/` abgelegt und dieser Block anschließend aktiviert werden.
 
-```text
-Unternehmen anlegen
-        ↓
-Bewerbung erstellen
-        ↓
-Status verfolgen
-        ↓
-Bewerbung aktualisieren
-        ↓
-nächste Aktion / Ergebnis
-```
+### Dashboard
 
-## MVP-Funktionen
-
-### Unternehmen
-
-- Unternehmen anlegen
-- Unternehmen anzeigen
-- Unternehmen bearbeiten
-- Unternehmen löschen
+![Dashboard](docs/screenshots/dashboard.png)
 
 ### Bewerbungen
 
-- Bewerbung anlegen
-- Bewerbung einem Unternehmen zuordnen
-- Bewerbung anzeigen
-- Bewerbung bearbeiten
-- Bewerbung löschen
-- Bewerbungsstatus verwalten
+![Bewerbungen](docs/screenshots/applications.png)
 
-### Übersicht und Stabilität
+### Unternehmen
 
-- Dashboard mit Bewerbungsstatistiken
-- Anzeige überfälliger Follow-ups
-- verständliche API-Fehlermeldungen
-- Backend-Logging für relevante Ereignisse und Fehler
+![Unternehmen](docs/screenshots/companies.png)
+-->
+
+## Funktionen
+
+- Unternehmen erstellen, anzeigen, bearbeiten und löschen
+- Bewerbungen einem Unternehmen zuordnen und verwalten
+- Bewerbungsstatus verfolgen: `Geplant`, `Beworben`, `Interview`, `Zusage`, `Absage`
+- Ansprechpartner, Stellenanzeige, Notizen und nächste Aktionen erfassen
+- überfällige Follow-ups automatisch anhand des nächsten Aktionsdatums erkennen
+- Dashboard mit Bewerbungsstatistiken und Statusverteilung
+- REST-API mit Suche und Filterung
+- fachliche Regeln im Backend validieren
+- erwartete API-Konflikte mit passenden HTTP-Statuscodes behandeln
+- verständliche Fehlermeldungen im Angular-Frontend anzeigen
+- relevante Backend-Ereignisse über Django-Logging protokollieren
+- zentrale Backend-Funktionen durch automatisierte Tests prüfen
 
 ## Tech-Stack
 
 | Bereich | Technologie |
 |---|---|
-| Frontend | Angular |
-| Backend | Django |
-| REST API | Django REST Framework |
+| Frontend | Angular 22, TypeScript, Reactive Forms, Signals |
+| Backend | Python, Django 6.1 |
+| REST API | Django REST Framework 3.18 |
 | Datenbank | SQLite |
 | Kommunikation | HTTP / JSON |
+| Versionsverwaltung | Git / GitHub |
 
-## Systemarchitektur
+## Architektur
 
 ```mermaid
-flowchart TD
+flowchart LR
     F[Angular Frontend]
     API[Django REST Framework]
-    D[Django]
+    ORM[Django ORM]
     DB[(SQLite)]
 
     F -->|HTTP / JSON| API
-    API --> D
-    D -->|Django ORM| DB
+    API --> ORM
+    ORM --> DB
 ```
+
+Im Frontend sind Seitenlogik und HTTP-Zugriffe getrennt: Angular-Komponenten verwenden API-Services, die über `HttpClient` mit dem Backend kommunizieren. Reactive Forms werden für die Eingabe verwendet, Signals für den lokalen UI-Zustand.
+
+Im Backend übernehmen Django-Modelle und ORM die Datenhaltung. Django REST Framework stellt Serializers, ViewSets und einen separaten Dashboard-Endpunkt bereit.
 
 ## Datenmodell
 
-### Beziehung zwischen den Modellen
-
-Eine `Company` kann mehrere `Applications` haben.
+Die zentrale Beziehung des Projekts ist:
 
 ```text
-Company
-   1
-   │
-   └──────< Application
-              n
+Company 1 ───────── n Application
 ```
 
-### Modellansicht
+Eine `Company` kann mehrere `Applications` haben. Jede `Application` gehört genau zu einer `Company`.
 
-```text
-┌─────────────────────┐
-│       Company       │
-├─────────────────────┤
-│ id                  │
-│ name                │
-│ website             │
-│ city                │
-│ career_url          │
-│ notes               │
-│ created_at          │
-│ updated_at          │
-└─────────┬───────────┘
-          │
-          │ 1
-          │
-          │ n
-┌─────────▼───────────┐
-│     Application     │
-├─────────────────────┤
-│ id                  │
-│ company_id          │
-│ position            │
-│ status              │
-│ application_date    │
-│ job_url             │
-│ contact_person      │
-│ contact_email       │
-│ next_action         │
-│ next_action_date    │
-│ notes               │
-│ created_at          │
-│ updated_at          │
-└─────────────────────┘
-```
+### Zentrale Business Rules
 
-### Modell `Company`
-
-| Feld | Django-Feld | Pflicht |
-|---|---|---|
-| `name` | `CharField` | ja |
-| `website` | `URLField` | nein |
-| `city` | `CharField` | nein |
-| `career_url` | `URLField` | nein |
-| `notes` | `TextField` | nein |
-| `created_at` | `DateTimeField` | automatisch |
-| `updated_at` | `DateTimeField` | automatisch |
-
-**Architekturhinweis:**  
-Kontaktpersonen werden nicht direkt in `Company` gespeichert, weil unterschiedliche Bewerbungen bei derselben Firma unterschiedliche Ansprechpartner haben können.
-
-Beispiel:
-
-```text
-Praktikum         → Frau Müller
-Junior Developer  → Herr Schmidt
-Werkstudent       → Frau Becker
-```
-
-### Modell `Application`
-
-| Feld | Django-Feld | Pflicht |
-|---|---|---|
-| `company` | `ForeignKey` | ja |
-| `position` | `CharField` | ja |
-| `status` | `Choice` | ja |
-| `application_date` | `DateField` | nein |
-| `job_url` | `URLField` | nein |
-| `contact_person` | `CharField` | nein |
-| `contact_email` | `EmailField` | nein |
-| `next_action` | `CharField` | nein |
-| `next_action_date` | `DateField` | nein |
-| `notes` | `TextField` | nein |
-| `created_at` | `DateTimeField` | automatisch |
-| `updated_at` | `DateTimeField` | automatisch |
-
-> Optional bedeutet hier: Das Feld ist Teil des Modells, muss aber nicht zwingend ausgefüllt werden.
+- Eine Bewerbung mit dem Status `PLANNED` darf kein `application_date` besitzen.
+- Unternehmen mit vorhandenen Bewerbungen können wegen `PROTECT` nicht gelöscht werden.
+- Ein geschützter Löschversuch wird über die API als `409 Conflict` zurückgegeben.
+- `next_action` und `next_action_date` beschreiben den nächsten geplanten Schritt.
+- Eine Bewerbung gilt als überfällig, wenn `next_action_date` in der Vergangenheit liegt und die Bewerbung noch nicht mit `ACCEPTED` oder `REJECTED` abgeschlossen ist.
+- Der Zustand `overdue` wird berechnet und nicht als eigenes Datenbankfeld gespeichert.
+- Ansprechpartner und Kontakt-E-Mail werden auf Ebene der Bewerbung gespeichert, da ein Unternehmen bei verschiedenen Bewerbungen unterschiedliche Ansprechpartner haben kann.
 
 ## Bewerbungsstatus
 
@@ -173,166 +97,199 @@ Werkstudent       → Frau Becker
 | `ACCEPTED` | Zusage |
 | `REJECTED` | Absage |
 
-## Benötigte CRUD-Funktionen
+## REST API
 
-### `Company`
+| Methode | Endpoint | Funktion |
+|---|---|---|
+| `GET`, `POST` | `/api/companies/` | Unternehmen anzeigen / erstellen |
+| `GET`, `PATCH`, `DELETE` | `/api/companies/{id}/` | einzelnes Unternehmen verwalten |
+| `GET`, `POST` | `/api/applications/` | Bewerbungen anzeigen / erstellen |
+| `GET`, `PATCH`, `DELETE` | `/api/applications/{id}/` | einzelne Bewerbung verwalten |
+| `GET` | `/api/dashboard/` | Dashboard-Statistiken abrufen |
 
-| Operation | Funktion |
-|---|---|
-| CREATE | Unternehmen hinzufügen |
-| READ | Unternehmen anzeigen |
-| UPDATE | Unternehmen bearbeiten |
-| DELETE | Unternehmen löschen |
+### Suche und Filter
 
-### `Application`
+Beispiele:
 
-| Operation | Funktion |
-|---|---|
-| CREATE | Bewerbung hinzufügen |
-| READ | Bewerbung anzeigen |
-| UPDATE | Bewerbung bearbeiten |
-| DELETE | Bewerbung löschen |
+```text
+/api/companies/?search=Paderborn
+/api/applications/?search=Python
+/api/applications/?status=APPLIED
+```
 
-Für die Beziehung zwischen `Application` und `Company` soll `PROTECT` statt `CASCADE` verwendet werden, damit Bewerbungen nicht versehentlich zusammen mit einem Unternehmen gelöscht werden.
+Die Unternehmenssuche berücksichtigt unter anderem Name und Ort. Bewerbungen können unter anderem nach Position, Unternehmen oder Ansprechpartner gesucht und nach Status gefiltert werden.
 
-## Business Rules
+## Dashboard
 
-- Jede `Application` gehört genau zu einer `Company`; eine `Company` kann mehrere `Applications` haben.
-- Für eine `Application` mit dem Status `PLANNED` darf kein `application_date` gesetzt sein.
-- `next_action` und `next_action_date` beschreiben den nächsten geplanten Schritt.
-- Eine `Application` gilt als **überfällig**, wenn `next_action_date` in der Vergangenheit liegt und die Bewerbung noch nicht abgeschlossen ist.
+Das Dashboard stellt eine kompakte Übersicht bereit:
 
-## Dashboard und Stabilität
-
-Das Dashboard fasst zentrale Informationen über Bewerbungen zusammen:
-
-- Anzahl der Unternehmen und Bewerbungen
-- Verteilung nach Bewerbungsstatus
+- Anzahl der Unternehmen
+- Gesamtzahl der Bewerbungen
+- Anzahl der Bewerbungen je Status
 - Anzahl überfälliger Follow-ups
 
-Überfällige Follow-ups werden aus `next_action_date` und dem
-aktuellen Bewerbungsstatus berechnet und nicht separat in der
-Datenbank gespeichert.
+Die Statistik wird im Backend über Django ORM berechnet und über einen eigenen REST-Endpunkt an Angular geliefert.
 
-Erwartete API-Konflikte und Validierungsfehler werden mit
-passenden HTTP-Statuscodes an das Frontend zurückgegeben.
-Relevante Backend-Ereignisse und Serverfehler werden über das
-Django-Logging protokolliert.
+## Fehlerbehandlung und Logging
 
-## Architekturentscheidungen
+Die Anwendung behandelt erwartbare Fehler sowohl im Backend als auch im Frontend.
 
-- Für das MVP bleiben zwei Hauptmodelle: `Company` und `Application`.
-- `Application.status` speichert nur den aktuellen Status.
-- Eine separate `ApplicationStatusHistory` wird erst in Phase 2 eingeführt.
-- `overdue` wird aus den vorhandenen Daten berechnet und nicht als eigenes Boolean-Feld gespeichert.
-- Kontaktinformationen zu Ansprechpartnern werden auf Ebene der `Application` gespeichert, nicht auf Ebene der `Company`.
+Beispiele:
 
-## Geplante Erweiterungen – Phase 2
+- ungültige fachliche Daten werden als `400 Bad Request` zurückgegeben
+- das Löschen eines Unternehmens mit vorhandenen Bewerbungen führt zu `409 Conflict`
+- Angular verarbeitet API-Fehler zentral und zeigt verständliche Meldungen an
+- Statusänderungen und blockierte Löschvorgänge werden im Backend protokolliert
+- Django-Request-Fehler ab `WARNING` werden über Console-Logging ausgegeben
 
+Personenbezogene Notizen oder vollständige Request-Inhalte werden nicht gezielt in den Anwendungslogs protokolliert.
+
+## Lokaler Start
+
+### Voraussetzungen
+
+- Python
+- Node.js und npm
+- Git
+
+### Backend
+
+```bash
+cd backend
+python -m venv .venv
+```
+
+Windows PowerShell:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+$env:DJANGO_SECRET_KEY="local-development-key"
+```
+
+Linux / macOS:
+
+```bash
+source .venv/bin/activate
+export DJANGO_SECRET_KEY="local-development-key"
+```
+
+Abhängigkeiten installieren und Datenbank vorbereiten:
+
+```bash
+python -m pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
+
+Das Backend läuft anschließend standardmäßig unter:
+
+```text
+http://127.0.0.1:8000/
+```
+
+### Frontend
+
+In einem zweiten Terminal:
+
+```bash
+cd frontend
+npm ci
+npm start
+```
+
+Das Frontend läuft anschließend standardmäßig unter:
+
+```text
+http://localhost:4200/
+```
+
+## Tests und Build
+
+Die Backend-Tests prüfen unter anderem:
+
+- `Company`-`Application`-Beziehung
+- Löschschutz durch `PROTECT`
+- REST-API
+- fachliche Validierung
+- Suche und Statusfilter
+- Dashboard-Statistiken und überfällige Follow-ups
+
+Backend-Tests ausführen:
+
+```bash
+cd backend
+python manage.py test
+```
+
+Angular Production Build prüfen:
+
+```bash
+cd frontend
+npm run build
+```
+
+## Projektstruktur
+
+```text
+bewerbungsmanager/
+├── backend/
+│   ├── applications/
+│   │   ├── migrations/
+│   │   ├── admin.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── tests.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   ├── config/
+│   ├── manage.py
+│   └── requirements.txt
+│
+├── frontend/
+│   ├── src/app/
+│   │   ├── models/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── utils/
+│   ├── package.json
+│   └── package-lock.json
+│
+├── docs/
+│   └── screenshots/        # optional für Portfolio-Screenshots
+│
+├── .gitignore
+└── README.md
+```
+
+## Entwicklungsprozess
+
+Das Projekt wurde schrittweise über **GitHub Milestones und Issues** entwickelt. Größere Änderungen wurden in eigenen Branches umgesetzt und über Pull Requests in `main` integriert.
+
+Dabei wurden unter anderem folgende Arbeitsweisen praktisch geübt:
+
+- Anforderungen in überschaubare Meilensteine zerlegen
+- Datenmodell und Business Rules vor der Implementierung definieren
+- Änderungen in logisch abgegrenzten Commits festhalten
+- Feature-Branches und Pull Requests verwenden
+- Backend und Frontend getrennt entwickeln und anschließend integrieren
+- wichtige fachliche Regeln durch Tests absichern
+- technische Entscheidungen und geplante Erweiterungen dokumentieren
+
+Die detaillierte Entwicklungshistorie ist über Issues, Milestones, Commits und Pull Requests im Repository nachvollziehbar.
+
+## Einsatz von KI
+
+Bei der Entwicklung dieses Projekts wurden KI-Tools unterstützend eingesetzt, unter anderem für **Erklärungen, Codevorschläge, Refactoring-Ideen und Fehlersuche**.
+
+Die Vorschläge wurden schrittweise in den Projektkontext eingeordnet, angepasst und überprüft. Architekturentscheidungen, fachliche Regeln und technische Lösungen wurden im Verlauf des Projekts diskutiert, praktisch umgesetzt und anhand des funktionierenden Zusammenspiels von Backend, REST-API, Tests und Frontend nachvollzogen.
+
+Ziel des Projekts war nicht nur, funktionierenden Code zu erstellen, sondern den Entwicklungsprozess und die verwendeten Konzepte praktisch zu verstehen und reproduzieren zu können.
+
+## Geplante Erweiterungen
+
+Bewusst nicht Teil des aktuellen MVP:
+
+- Statushistorie einer Bewerbung (`ApplicationStatusHistory`)
 - Filter „keine Antwort seit mehr als 14 Tagen“
-- `ApplicationStatusHistory`
 
-## Projektstatus
-
-### Meilenstein 1 – Projektdefinition und Datenmodell
-
-- [x] Projektidee, Hauptworkflow, MVP und Definition of Done definiert
-- [x] Fachliche Anforderungen definiert
-- [x] Datenmodell entworfen
-- [x] Status und Business Rules definiert
-- [x] Architekturentscheidungen dokumentiert
-- [x] README für Meilenstein 1 konsolidiert
-
-### Meilenstein 2 – Backend-Grundlage
-
-- [x] Backend-Umgebung eingerichtet
-- [x] Django-Projekt erstellt
-- [x] Django-App `applications` erstellt
-- [x] Django REST Framework integriert
-- [x] Backend erfolgreich gestartet
-
-### Meilenstein 3 – Django-Datenmodell
-
-- [x] Modelle `Company` und `Application` implementiert
-- [x] 1:n-Beziehung umgesetzt
-- [x] Bewerbungsstatus mit `TextChoices` definiert
-- [x] Migration erstellt und angewendet
-- [x] Modelle im Django Admin geprüft
-
-### Meilenstein 4 – REST API
-
-- [x] Serializer für Company und Application implementiert
-- [x] Business Validation hinzugefügt
-- [x] CRUD-Endpunkte erstellt
-- [x] API-Routing konfiguriert
-- [x] Suche implementiert
-- [x] Filter nach Bewerbungsstatus implementiert
-- [x] API manuell geprüft
-
-### Meilenstein 5 – Backend-Tests
-
-- [x] Datenmodell getestet
-- [x] `PROTECT`-Verhalten getestet
-- [x] REST-API getestet
-- [x] Business Validation getestet
-- [x] Statusfilter getestet
-- [x] Suchfunktion getestet
-
-### Meilenstein 6 – Angular-Grundlage
-
-- [x] Angular-Projekt erstellt
-- [x] grundlegende Seiten erstellt
-- [x] Routing eingerichtet
-- [x] Navigation funktioniert
-- [x] Development Server geprüft
-- [x] Production Build geprüft
-
-### Meilenstein 7 – Frontend-Backend-Integration
-
-- [x] CORS für Angular konfiguriert
-- [x] HttpClient eingerichtet
-- [x] TypeScript-Datenmodelle erstellt
-- [x] API-Services implementiert
-- [x] Unternehmen über REST API geladen
-- [x] Bewerbungen über REST API geladen
-- [x] grundlegende Fehlerbehandlung ergänzt
-- [x] Frontend-Backend-Verbindung geprüft
-
-### Meilenstein 8 – Frontend CRUD
-
-- [x] Companies über Angular erstellen
-- [x] Companies bearbeiten und löschen
-- [x] Applications erstellen
-- [x] Applications bearbeiten und löschen
-- [x] Unternehmen und Status auswählbar
-- [x] Frontend mit Backend-Validierung geprüft
-
-### Meilenstein 9 – MVP-Finish und UX
-
-- [x] Loading-, Empty- und Error-Zustände verbessert
-- [x] API-Validierungsfehler verständlicher dargestellt
-- [x] Löschfehler verständlich behandelt
-- [x] Statusdarstellung verbessert
-- [x] Formulare und Layout vereinheitlicht
-- [x] vollständigen Benutzer-Workflow geprüft
-- [x] Backend-Tests erfolgreich
-- [x] Angular Production Build erfolgreich
-
-### MVP-Status
-
-Der funktionale MVP des Bewerbungsmanagers ist abgeschlossen.
-
-### Meilenstein 10 – Stabilität und Dashboard
-
-- [x] API-Fehlerbehandlung verbessert
-- [x] geschütztes Löschen als HTTP 409 behandelt
-- [x] Backend-Logging eingerichtet
-- [x] Dashboard-API implementiert
-- [x] überfällige Follow-ups berechnet
-- [x] Angular-Dashboard integriert
-- [x] Backend-Tests erfolgreich
-- [x] Angular Production Build erfolgreich
-
-### Nächster Schritt
-
-**Meilenstein 11 – Portfolio-Finish**
+Diese Erweiterungen sind vorgesehen, ohne die aktuelle MVP-Struktur unnötig zu vergrößern.
