@@ -1,5 +1,71 @@
 <h1>Dashboard</h1>
 
-<p>Willkommen im Bewerbungsmanager.</p>
+@if (isLoading()) {
+  <p>Daten werden geladen...</p>
+}
 
-<p>Unternehmen und Bewerbungen können über die Navigation verwaltet werden.</p>
+@if (errorMessage()) {
+  <p class="message error">
+    {{ errorMessage() }}
+  </p>
+}
+
+@if (stats(); as dashboard) {
+  <section class="dashboard-grid">
+    <article>
+      <span>Unternehmen</span>
+      <strong>
+        {{ dashboard.companies_total }}
+      </strong>
+    </article>
+
+    <article>
+      <span>Bewerbungen</span>
+      <strong>
+        {{ dashboard.applications_total }}
+      </strong>
+    </article>
+
+    <article>
+      <span>Geplant</span>
+      <strong>
+        {{ dashboard.by_status.PLANNED }}
+      </strong>
+    </article>
+
+    <article>
+      <span>Beworben</span>
+      <strong>
+        {{ dashboard.by_status.APPLIED }}
+      </strong>
+    </article>
+
+    <article>
+      <span>Interview</span>
+      <strong>
+        {{ dashboard.by_status.INTERVIEW }}
+      </strong>
+    </article>
+
+    <article>
+      <span>Zusage</span>
+      <strong>
+        {{ dashboard.by_status.ACCEPTED }}
+      </strong>
+    </article>
+
+    <article>
+      <span>Absage</span>
+      <strong>
+        {{ dashboard.by_status.REJECTED }}
+      </strong>
+    </article>
+
+    <article>
+      <span>Überfällige Follow-ups</span>
+      <strong>
+        {{ dashboard.overdue_follow_ups }}
+      </strong>
+    </article>
+  </section>
+}
