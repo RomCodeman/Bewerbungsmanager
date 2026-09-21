@@ -38,6 +38,13 @@ nächste Aktion / Ergebnis
 - Bewerbung löschen
 - Bewerbungsstatus verwalten
 
+### Übersicht und Stabilität
+
+- Dashboard mit Bewerbungsstatistiken
+- Anzeige überfälliger Follow-ups
+- verständliche API-Fehlermeldungen
+- Backend-Logging für relevante Ereignisse und Fehler
+
 ## Tech-Stack
 
 | Bereich | Technologie |
@@ -195,6 +202,23 @@ Für die Beziehung zwischen `Application` und `Company` soll `PROTECT` statt `CA
 - `next_action` und `next_action_date` beschreiben den nächsten geplanten Schritt.
 - Eine `Application` gilt als **überfällig**, wenn `next_action_date` in der Vergangenheit liegt und die Bewerbung noch nicht abgeschlossen ist.
 
+## Dashboard und Stabilität
+
+Das Dashboard fasst zentrale Informationen über Bewerbungen zusammen:
+
+- Anzahl der Unternehmen und Bewerbungen
+- Verteilung nach Bewerbungsstatus
+- Anzahl überfälliger Follow-ups
+
+Überfällige Follow-ups werden aus `next_action_date` und dem
+aktuellen Bewerbungsstatus berechnet und nicht separat in der
+Datenbank gespeichert.
+
+Erwartete API-Konflikte und Validierungsfehler werden mit
+passenden HTTP-Statuscodes an das Frontend zurückgegeben.
+Relevante Backend-Ereignisse und Serverfehler werden über das
+Django-Logging protokolliert.
+
 ## Architekturentscheidungen
 
 - Für das MVP bleiben zwei Hauptmodelle: `Company` und `Application`.
@@ -205,8 +229,6 @@ Für die Beziehung zwischen `Application` und `Company` soll `PROTECT` statt `CA
 
 ## Geplante Erweiterungen – Phase 2
 
-- Dashboard mit Statistiken
-- Überfällige Follow-ups
 - Filter „keine Antwort seit mehr als 14 Tagen“
 - `ApplicationStatusHistory`
 
@@ -300,6 +322,17 @@ Für die Beziehung zwischen `Application` und `Company` soll `PROTECT` statt `CA
 
 Der funktionale MVP des Bewerbungsmanagers ist abgeschlossen.
 
+### Meilenstein 10 – Stabilität und Dashboard
+
+- [x] API-Fehlerbehandlung verbessert
+- [x] geschütztes Löschen als HTTP 409 behandelt
+- [x] Backend-Logging eingerichtet
+- [x] Dashboard-API implementiert
+- [x] überfällige Follow-ups berechnet
+- [x] Angular-Dashboard integriert
+- [x] Backend-Tests erfolgreich
+- [x] Angular Production Build erfolgreich
+
 ### Nächster Schritt
 
-**Meilenstein 10 – Portfolio-Finish**
+**Meilenstein 11 – Portfolio-Finish**
