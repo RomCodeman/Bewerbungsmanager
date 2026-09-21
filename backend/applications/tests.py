@@ -6,6 +6,10 @@ from rest_framework.test import APITestCase
 
 from .models import Application, Company
 
+from datetime import timedelta
+
+from django.utils import timezone
+
 
 # Create your tests here.
 class ApplicationModelTests(TestCase):
@@ -180,4 +184,55 @@ class ApplicationAPITests(APITestCase):
         self.assertEqual(
             response.data[0]["name"],
             "Beispiel GmbH",
+        )
+
+
+class DashboardAPITests(APITestCase):
+    def setUp(self):
+        self.company = Company.objects.create(
+            name="Dashboard GmbH",
+        )
+
+        Application.objects.create(
+            company=self.company,
+            position="Python Praktikum",
+            status=Application.Status.APPLIED,
+            application_date=timezone.localdate(),
+            next_action="Nachfragen",
+            next_action_date=(timezone.localdate() - timedelta(days=1)),
+        )
+
+        Application.objects.create(
+            company=self.company,
+            position="Backend Praktikum",
+            status=Application.Status.INTERVIEW,
+            application_date=timezone.localdate(),
+        )
+
+    def test_dashboard_returns_statistics(self):
+        response = self.client.get(reverse("dashboard"))
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK,
+        )
+
+        self.assertEqual(
+            response.data["applications_total"],
+            2,
+        )
+
+        self.assertEqual(
+            response.data["by_status"]["APPLIED"],
+            1,
+        )
+
+        self.assertEqual(
+            response.data["by_status"]["INTERVIEW"],
+            1,
+        )
+
+        self.assertEqual(
+            response.data["overdue_follow_ups"],
+            1,
         )

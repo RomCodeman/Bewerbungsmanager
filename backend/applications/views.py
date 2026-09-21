@@ -7,6 +7,11 @@ from django.db.models.deletion import ProtectedError
 from rest_framework import filters, status, viewsets
 from rest_framework.response import Response
 
+from django.db.models import Count
+from django.utils import timezone
+
+from rest_framework.views import APIView
+
 logger = logging.getLogger(__name__)
 
 
@@ -72,3 +77,37 @@ class ApplicationViewSet(viewsets.ModelViewSet):
                 previous_status,
                 application.status,
             )
+
+
+class DashboardView(APIView):
+    def get(self, request):
+        status_counts = {status: 0 for status, _ in Application.Status.choices}
+
+        grouped_statuses = Application.objects.values("status").annotate(
+            total=Count("id")
+        )
+
+        for item in grouped_statuses:
+            status_counts[item["status"]] = item["total"]
+
+        overdue_follow_ups = (
+            Application.objects.filter(
+                next_action_date__lt=timezone.localdate(),
+            )
+            .exclude(
+                status__in=[
+                    Application.Status.ACCEPTED,
+                    Application.Status.REJECTED,
+                ]
+            )
+            .count()
+        )
+
+        return Response(
+            {
+                "companies_total": Company.objects.count(),
+                "applications_total": sum(status_counts.values()),
+                "by_status": status_counts,
+                "overdue_follow_ups": overdue_follow_ups,
+            }
+        )
