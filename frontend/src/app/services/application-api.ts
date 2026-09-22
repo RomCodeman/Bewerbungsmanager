@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 
 import { Application } from '../models/application';
 
+import { API_BASE_URL } from '../config/api';
+
 export type ApplicationPayload = Omit<
   Application,
   'id' | 'status_display' | 'created_at' | 'updated_at'
@@ -14,8 +16,7 @@ export type ApplicationPayload = Omit<
 })
 export class ApplicationApi {
   private readonly http = inject(HttpClient);
-
-  private readonly apiUrl = 'http://127.0.0.1:8000/api/applications/';
+  private readonly apiUrl = `${API_BASE_URL}/applications/`;
 
   getAll(): Observable<Application[]> {
     return this.http.get<Application[]>(this.apiUrl);

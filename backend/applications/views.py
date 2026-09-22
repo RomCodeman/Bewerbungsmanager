@@ -1,16 +1,14 @@
-from .models import Application, Company
-from .serializers import ApplicationSerializer, CompanySerializer
-
 import logging
-
-from django.db.models.deletion import ProtectedError
-from rest_framework import filters, status, viewsets
-from rest_framework.response import Response
 
 from django.db.models import Count
 from django.utils import timezone
-
+from django.db.models.deletion import ProtectedError
+from rest_framework import filters, status, viewsets
+from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from .models import Application, Company
+from .serializers import ApplicationSerializer, CompanySerializer
 
 logger = logging.getLogger(__name__)
 

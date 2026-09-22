@@ -25,6 +25,8 @@ export class Applications implements OnInit {
 
   private readonly fb = inject(FormBuilder);
 
+  readonly showForm = signal(false);
+
   readonly applications = signal<Application[]>([]);
 
   readonly companies = signal<Company[]>([]);
@@ -152,6 +154,7 @@ export class Applications implements OnInit {
   }
 
   edit(application: Application): void {
+    this.showForm.set(true);
     this.editingId.set(application.id);
 
     this.form.patchValue({
@@ -200,11 +203,17 @@ export class Applications implements OnInit {
       notes: '',
     });
 
-    this.editingId.set(null);
     this.errorMessage.set('');
+    this.editingId.set(null);
+    this.showForm.set(false);
   }
 
   companyName(companyId: number): string {
     return this.companies().find((company) => company.id === companyId)?.name ?? 'Unbekannt';
+  }
+
+  openCreateForm(): void {
+    this.resetForm();
+    this.showForm.set(true);
   }
 }
