@@ -40,14 +40,14 @@ Das Projekt entstand als Portfolio- und Lernprojekt im Rahmen meiner Umschulung 
 
 ## Tech-Stack
 
-| Bereich | Technologie |
-|---|---|
-| Frontend | Angular 22, TypeScript, Reactive Forms, Signals |
-| Backend | Python, Django 6.1 |
-| REST API | Django REST Framework 3.18 |
-| Datenbank | SQLite |
-| Kommunikation | HTTP / JSON |
-| Versionsverwaltung | Git / GitHub |
+| Bereich            | Technologie                                     |
+| ------------------ | ----------------------------------------------- |
+| Frontend           | Angular 22, TypeScript, Reactive Forms, Signals |
+| Backend            | Python, Django 6.1                              |
+| REST API           | Django REST Framework 3.18                      |
+| Datenbank          | SQLite                                          |
+| Kommunikation      | HTTP / JSON                                     |
+| Versionsverwaltung | Git / GitHub                                    |
 
 ## Architektur
 
@@ -89,23 +89,23 @@ Eine `Company` kann mehrere `Applications` haben. Jede `Application` gehört gen
 
 ## Bewerbungsstatus
 
-| API-/DB-Wert | Anzeige |
-|---|---|
-| `PLANNED` | Geplant |
-| `APPLIED` | Beworben |
-| `INTERVIEW` | Interview |
-| `ACCEPTED` | Zusage |
-| `REJECTED` | Absage |
+| API-/DB-Wert | Anzeige   |
+| ------------ | --------- |
+| `PLANNED`    | Geplant   |
+| `APPLIED`    | Beworben  |
+| `INTERVIEW`  | Interview |
+| `ACCEPTED`   | Zusage    |
+| `REJECTED`   | Absage    |
 
 ## REST API
 
-| Methode | Endpoint | Funktion |
-|---|---|---|
-| `GET`, `POST` | `/api/companies/` | Unternehmen anzeigen / erstellen |
-| `GET`, `PATCH`, `DELETE` | `/api/companies/{id}/` | einzelnes Unternehmen verwalten |
-| `GET`, `POST` | `/api/applications/` | Bewerbungen anzeigen / erstellen |
-| `GET`, `PATCH`, `DELETE` | `/api/applications/{id}/` | einzelne Bewerbung verwalten |
-| `GET` | `/api/dashboard/` | Dashboard-Statistiken abrufen |
+| Methode                  | Endpoint                  | Funktion                         |
+| ------------------------ | ------------------------- | -------------------------------- |
+| `GET`, `POST`            | `/api/companies/`         | Unternehmen anzeigen / erstellen |
+| `GET`, `PATCH`, `DELETE` | `/api/companies/{id}/`    | einzelnes Unternehmen verwalten  |
+| `GET`, `POST`            | `/api/applications/`      | Bewerbungen anzeigen / erstellen |
+| `GET`, `PATCH`, `DELETE` | `/api/applications/{id}/` | einzelne Bewerbung verwalten     |
+| `GET`                    | `/api/dashboard/`         | Dashboard-Statistiken abrufen    |
 
 ### Suche und Filter
 
@@ -201,6 +201,15 @@ Das Frontend läuft anschließend standardmäßig unter:
 
 ```text
 http://localhost:4200/
+```
+
+### Demo-Daten
+
+Für eine schnelle lokale Demonstration kann ein fiktiver
+Demo-Datensatz erstellt werden:
+
+```bash
+python manage.py seed_demo
 ```
 
 ## Tests und Build
