@@ -1,38 +1,42 @@
 <h1>Unternehmen</h1>
 
 <form [formGroup]="form" (ngSubmit)="save()">
-  <label>
-    Name
-    <input formControlName="name" />
-  </label>
+  <div class="form-grid">
+    <label>
+      Name
+      <input formControlName="name" />
+    </label>
 
-  <label>
-    Website
-    <input formControlName="website" />
-  </label>
+    <label>
+      Ort
+      <input formControlName="city" />
+    </label>
 
-  <label>
-    Ort
-    <input formControlName="city" />
-  </label>
+    <label>
+      Website
+      <input formControlName="website" />
+    </label>
 
-  <label>
-    Karriere-URL
-    <input formControlName="career_url" />
-  </label>
+    <label>
+      Karriere-URL
+      <input formControlName="career_url" />
+    </label>
+  </div>
 
   <label>
     Notizen
     <textarea formControlName="notes"></textarea>
   </label>
 
-  <button type="submit" [disabled]="form.invalid">
-    {{ editingId() === null ? 'Hinzufügen' : 'Speichern' }}
-  </button>
+  <div class="form-actions">
+    <button type="submit" [disabled]="form.invalid">
+      {{ editingId() === null ? 'Hinzufügen' : 'Speichern' }}
+    </button>
 
-  @if (editingId() !== null) {
-    <button type="button" (click)="resetForm()">Abbrechen</button>
-  }
+    @if (editingId() !== null) {
+      <button type="button" (click)="resetForm()">Abbrechen</button>
+    }
+  </div>
 </form>
 
 @if (isLoading()) {
@@ -45,32 +49,24 @@
   </p>
 }
 
-@if (
-  !isLoading() &&
-  !errorMessage() &&
-  companies().length === 0
-) {
+@if (!isLoading() && !errorMessage() && companies().length === 0) {
   <p>Noch keine Unternehmen vorhanden.</p>
 }
 
-@if (!isLoading()) {
+@if (!isLoading() && !errorMessage()) {
   @for (company of companies(); track company.id) {
-    <!-- Company -->
+    <article>
+      <h2>{{ company.name }}</h2>
+
+      @if (company.city) {
+        <p>{{ company.city }}</p>
+      }
+
+      <div class="form-actions">
+        <button type="button" (click)="edit(company)">Bearbeiten</button>
+
+        <button type="button" (click)="delete(company)">Löschen</button>
+      </div>
+    </article>
   }
-}
-
-<hr />
-
-@for (company of companies(); track company.id) {
-  <article>
-    <h2>{{ company.name }}</h2>
-
-    @if (company.city) {
-      <p>{{ company.city }}</p>
-    }
-
-    <button type="button" (click)="edit(company)">Bearbeiten</button>
-
-    <button type="button" (click)="delete(company)">Löschen</button>
-  </article>
 }

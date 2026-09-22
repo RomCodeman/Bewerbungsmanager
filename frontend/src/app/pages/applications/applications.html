@@ -1,53 +1,45 @@
 <h1>Bewerbungen</h1>
 
 <form [formGroup]="form" (ngSubmit)="save()">
-  <label>
-    Unternehmen
-    <select formControlName="company">
-      <option [ngValue]="null">Unternehmen auswählen</option>
+  <div class="form-grid">
+    <label>
+      Unternehmen
+      <select formControlName="company">
+        ...
+      </select>
+    </label>
 
-      @for (company of companies(); track company.id) {
-        <option [ngValue]="company.id">
-          {{ company.name }}
-        </option>
-      }
-    </select>
-  </label>
+    <label>
+      Position
+      <input formControlName="position" />
+    </label>
 
-  <label>
-    Position
-    <input formControlName="position" />
-  </label>
+    <label>
+      Status
+      <select formControlName="status">
+        ...
+      </select>
+    </label>
 
-  <label>
-    Status
-    <select formControlName="status">
-      @for (status of statuses; track status.value) {
-        <option [value]="status.value">
-          {{ status.label }}
-        </option>
-      }
-    </select>
-  </label>
+    <label>
+      Bewerbungsdatum
+      <input type="date" formControlName="application_date" />
+    </label>
 
-  <label>
-    Bewerbungsdatum
-    <input type="date" formControlName="application_date" />
-  </label>
+    <label>
+      Ansprechpartner
+      <input formControlName="contact_person" />
+    </label>
+
+    <label>
+      E-Mail
+      <input type="email" formControlName="contact_email" />
+    </label>
+  </div>
 
   <label>
     Stellenanzeige
     <input formControlName="job_url" />
-  </label>
-
-  <label>
-    Ansprechpartner
-    <input formControlName="contact_person" />
-  </label>
-
-  <label>
-    E-Mail
-    <input type="email" formControlName="contact_email" />
   </label>
 
   <label>
@@ -65,13 +57,15 @@
     <textarea formControlName="notes"></textarea>
   </label>
 
-  <button type="submit" [disabled]="form.invalid">
-    {{ editingId() === null ? 'Hinzufügen' : 'Speichern' }}
-  </button>
+  <div class="form-actions">
+    <button type="submit" [disabled]="form.invalid">
+      {{ editingId() === null ? 'Hinzufügen' : 'Speichern' }}
+    </button>
 
-  @if (editingId() !== null) {
-    <button type="button" (click)="resetForm()">Abbrechen</button>
-  }
+    @if (editingId() !== null) {
+      <button type="button" (click)="resetForm()">Abbrechen</button>
+    }
+  </div>
 </form>
 
 @if (isLoading()) {
@@ -100,20 +94,22 @@
         {{ companyName(application.company) }}
       </p>
 
-      <span
-        class="status"
-        [class.status-planned]="application.status === 'PLANNED'"
-        [class.status-applied]="application.status === 'APPLIED'"
-        [class.status-interview]="application.status === 'INTERVIEW'"
-        [class.status-accepted]="application.status === 'ACCEPTED'"
-        [class.status-rejected]="application.status === 'REJECTED'"
-      >
-        {{ application.status_display }}
-      </span>
+      <div class="application-actions">
+        <span
+          class="status"
+          [class.status-planned]="application.status === 'PLANNED'"
+          [class.status-applied]="application.status === 'APPLIED'"
+          [class.status-interview]="application.status === 'INTERVIEW'"
+          [class.status-accepted]="application.status === 'ACCEPTED'"
+          [class.status-rejected]="application.status === 'REJECTED'"
+        >
+          {{ application.status_display }}
+        </span>
 
-      <button type="button" (click)="edit(application)">Bearbeiten</button>
+        <button type="button" (click)="edit(application)">Bearbeiten</button>
 
-      <button type="button" (click)="delete(application)">Löschen</button>
+        <button type="button" (click)="delete(application)">Löschen</button>
+      </div>
     </article>
   }
 }
