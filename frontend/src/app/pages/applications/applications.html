@@ -1,72 +1,78 @@
-<h1>Bewerbungen</h1>
+<div class="page-header">
+  <h1>Bewerbungen</h1>
 
-<form [formGroup]="form" (ngSubmit)="save()">
-  <div class="form-grid">
+  <button type="button" (click)="openCreateForm()">Neue Bewerbung</button>
+</div>
+
+@if (showForm()) {
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-grid">
+      <label>
+        Unternehmen
+        <select formControlName="company">
+          ...
+        </select>
+      </label>
+
+      <label>
+        Position
+        <input formControlName="position" />
+      </label>
+
+      <label>
+        Status
+        <select formControlName="status">
+          ...
+        </select>
+      </label>
+
+      <label>
+        Bewerbungsdatum
+        <input type="date" formControlName="application_date" />
+      </label>
+
+      <label>
+        Ansprechpartner
+        <input formControlName="contact_person" />
+      </label>
+
+      <label>
+        E-Mail
+        <input type="email" formControlName="contact_email" />
+      </label>
+    </div>
+
     <label>
-      Unternehmen
-      <select formControlName="company">
-        ...
-      </select>
+      Stellenanzeige
+      <input formControlName="job_url" />
     </label>
 
     <label>
-      Position
-      <input formControlName="position" />
+      Nächster Schritt
+      <input formControlName="next_action" />
     </label>
 
     <label>
-      Status
-      <select formControlName="status">
-        ...
-      </select>
+      Datum der nächsten Aktion
+      <input type="date" formControlName="next_action_date" />
     </label>
 
     <label>
-      Bewerbungsdatum
-      <input type="date" formControlName="application_date" />
+      Notizen
+      <textarea formControlName="notes"></textarea>
     </label>
 
-    <label>
-      Ansprechpartner
-      <input formControlName="contact_person" />
-    </label>
+    <div class="form-actions">
+      <button type="submit" [disabled]="form.invalid">
+        {{ editingId() === null ? 'Hinzufügen' : 'Speichern' }}
+      </button>
 
-    <label>
-      E-Mail
-      <input type="email" formControlName="contact_email" />
-    </label>
-  </div>
-
-  <label>
-    Stellenanzeige
-    <input formControlName="job_url" />
-  </label>
-
-  <label>
-    Nächster Schritt
-    <input formControlName="next_action" />
-  </label>
-
-  <label>
-    Datum der nächsten Aktion
-    <input type="date" formControlName="next_action_date" />
-  </label>
-
-  <label>
-    Notizen
-    <textarea formControlName="notes"></textarea>
-  </label>
-
-  <div class="form-actions">
-    <button type="submit" [disabled]="form.invalid">
-      {{ editingId() === null ? 'Hinzufügen' : 'Speichern' }}
-    </button>
-
-    @if (editingId() !== null) {
-      <button type="button" (click)="resetForm()">Abbrechen</button>
-    }
-  </div>
-</form>
+      @if (editingId() !== null) {
+        <button type="button" (click)="resetForm()">Abbrechen</button>
+      }
+    </div>
+  </form>
+}
 
 @if (isLoading()) {
   <p>Daten werden geladen...</p>
