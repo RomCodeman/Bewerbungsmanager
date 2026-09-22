@@ -4,11 +4,7 @@ Eine Full-Stack-Webanwendung zur strukturierten Verwaltung von Unternehmen, Bewe
 
 Das Projekt entstand als Portfolio- und Lernprojekt im Rahmen meiner Umschulung zum **Fachinformatiker für Anwendungsentwicklung (FIAE)**. Ziel war es, einen vollständigen Entwicklungsprozess praktisch umzusetzen: von der fachlichen Planung und Datenmodellierung über eine REST-API bis zur Integration eines Angular-Frontends.
 
-<!--
 ## Screenshots
-
-> Die Bilddateien können nach dem finalen Portfolio-Check unter
-> `docs/screenshots/` abgelegt und dieser Block anschließend aktiviert werden.
 
 ### Dashboard
 
@@ -18,10 +14,13 @@ Das Projekt entstand als Portfolio- und Lernprojekt im Rahmen meiner Umschulung 
 
 ![Bewerbungen](docs/screenshots/applications.png)
 
+### Bewerbungsformular
+
+![Bewerbungsformular](docs/screenshots/application_form.png)
+
 ### Unternehmen
 
 ![Unternehmen](docs/screenshots/companies.png)
--->
 
 ## Funktionen
 
